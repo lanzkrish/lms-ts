@@ -1,7 +1,7 @@
 import { Logo } from "./logo"
 import { SidebarRoutes } from "./sidebar-routes";
 
-const sidebar = () => {
+export const Sidebar = () => {
     return ( 
         <div className="h-full border-r flex-col overflow-y-auto bg-white shadow-sm">
             <div className="p-6">
@@ -14,4 +14,3 @@ const sidebar = () => {
      );
 }
  
-export default sidebar;
