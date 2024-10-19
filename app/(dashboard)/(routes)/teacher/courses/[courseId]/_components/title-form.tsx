@@ -11,13 +11,16 @@ import{
     FormControl,
     FormField,
     FormMessage,
-    FormItem
+    FormItem,
+    FormDescription
 } from "@/components/ui/form"
 
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Pencil } from "lucide-react";
+import toast from "react-hot-toast";
+import { useRouter } from "next/router";
 
 
 interface TitleFormProps {
@@ -41,6 +44,10 @@ export const TitleForm = ({
 
     const [isEditing, setIsEditing] = useState(false); 
 
+    const toggleEdit = () => setIsEditing((current) => !current);
+
+    const router = useRouter
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -51,7 +58,13 @@ export const TitleForm = ({
     const {isSubmitting, isValid} = form.formState;
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
-        console.log(values);
+        try{
+            await axios.patch(`/api/courses/${courseId}`, values);
+            toast.success("Course title updated successfully");
+            toggleEdit();
+        } catch{
+            toast.error("Something went wrong");
+        }
     }
 
 
@@ -59,11 +72,61 @@ export const TitleForm = ({
         <div className="mt-6 bg-slate-100 rounded-md p-4">
             <div className="font-medium flex items-center justify-between">
                 Course Title
-                <Button variant="ghost" >
-                    <Pencil className="h-4 w-4 mr-2" />
-                    Edit title
+                <Button onClick={toggleEdit} variant="ghost" >
+                    {
+                        isEditing ?(
+                            <>Cancel</>
+                        ): (
+                            <>
+                            <Pencil className="h-4 w-4 mr-2" />
+                                Edit title  
+                            </>
+                        )}
+                    
                 </Button>
             </div>
+            {!isEditing && (
+                <p className="text-sm mt-2">
+                    {initialData.title}
+                </p>
+            )}
+            {isEditing && (
+                <Form {...form}>
+                    <form
+                        onSubmit={form.handleSubmit(onSubmit)}
+                        className="mt-4 space-y-4"
+                    >
+                        <FormField
+                        control={form.control}
+                        name="title"
+                        render={({ field }) => ( 
+                            <FormItem>
+                                    <FormControl>
+                                        <Input
+                                        disabled={isSubmitting}
+                                        placeholder="e.g. 'Introduction to Web Development'"
+                                        {...field}
+                                        />
+                                    </FormControl>
+                                    <FormDescription>
+                                        What would you like to name your course?
+                                    </FormDescription>
+                                    <FormMessage />
+                            </FormItem>
+                        )} 
+                        />
+                        <div className="flex items-center gap-x-2">
+                            <Button 
+                                disabled={!isValid || isSubmitting}
+                                type="submit"
+                            >
+                                Save
+                            </Button>
+                        </div>
+                    </form>
+                    
+                </Form>
+            )}
         </div>
     )
 }

@@ -66,11 +66,11 @@ const CourseIdPage = async ({
                         <h2 className="text-xl">
                             Customize your course
                         </h2>
-                        <TitleForm
+                    </div>
+                    <TitleForm
                         initialData={course}
                         courseId={course.id}
                         />
-                    </div>
                 </div>
             </div>
         </div>
