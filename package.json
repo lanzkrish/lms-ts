@@ -9,8 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@clerk/nextjs": "^5.7.3",
+    "@clerk/nextjs": "^5.7.5",
     "@hookform/resolvers": "^3.9.0",
+    "@prisma/client": "^5.21.1",
     "@radix-ui/react-dialog": "^1.1.2",
     "@radix-ui/react-label": "^2.1.0",
     "@radix-ui/react-slot": "^1.1.0",
@@ -24,6 +25,7 @@
     "eslint": "8.57.1",
     "eslint-config-next": "13.4.12",
     "lucide-react": "^0.453.0",
+    "mongodb": "^6.9.0",
     "next": "^14.2.15",
     "postcss": "8.4.47",
     "react": "18.3.1",
