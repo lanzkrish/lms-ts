@@ -21,26 +21,27 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Pencil } from "lucide-react";
 import toast from "react-hot-toast";
+import { cn } from "@/lib/utils";
+import { Textarea } from "@/components/ui/textarea";
+import { Course } from "@prisma/client";
 
 
-interface TitleFormProps {
-    initialData: {
-        title: string;
-    };
+interface DescriptionFormProps {
+    initialData: Course;
     courseId: string;
 }
 
 const formSchema = z.object({
-    title:z.string().min(1,{
-        message: "Title is required"
+    description:z.string().min(1,{
+        message: "Description is required"
     })
 });
 
 
-export const TitleForm = ({
+export const DescriptionForm = ({
     initialData,
     courseId,
-}: TitleFormProps ) => {
+}: DescriptionFormProps ) => {
 
     const [isEditing, setIsEditing] = useState(false); 
 
@@ -51,7 +52,7 @@ export const TitleForm = ({
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            title: initialData.title,
+            description: initialData?.description || "",
         },
     });
 
@@ -60,7 +61,7 @@ export const TitleForm = ({
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try{
             await axios.patch(`/api/courses/${courseId}`, values);
-            toast.success("Course title updated successfully");
+            toast.success("Course description updated successfully");
             toggleEdit();
             router.refresh();
         } catch{
@@ -72,7 +73,7 @@ export const TitleForm = ({
     return(
         <div className="mt-6 bg-slate-100 rounded-md p-4">
             <div className="font-medium flex items-center justify-between">
-                Course Title
+                Course Description
                 <Button onClick={toggleEdit} variant="ghost" >
                     {
                         isEditing ?(
@@ -80,15 +81,17 @@ export const TitleForm = ({
                         ): (
                             <>
                             <Pencil className="h-4 w-4 mr-2" />
-                                Edit title  
+                                Edit description  
                             </>
                         )}
                     
                 </Button>
             </div>
             {!isEditing && (
-                <p className="text-sm mt-2">
-                    {initialData.title}
+                <p className={cn("text-sm mt-2", 
+                    !initialData.description && "text-slate-500 italic"
+                )}>
+                    {initialData.description || "No description added"}
                 </p>
             )}
             {isEditing && (
@@ -99,18 +102,18 @@ export const TitleForm = ({
                     >
                         <FormField
                         control={form.control}
-                        name="title"
+                        name="description"
                         render={({ field }) => ( 
                             <FormItem>
                                     <FormControl>
-                                        <Input
+                                        <Textarea
                                         disabled={isSubmitting}
-                                        placeholder="e.g. 'Introduction to Web Development'"
+                                        placeholder="e.g. 'This couse is about web development ....'"
                                         {...field}
                                         />
                                     </FormControl>
                                     <FormDescription>
-                                        What would you like to name your course?
+                                        Add some description to your course so that students will know what this video is about.
                                     </FormDescription>
                                     <FormMessage />
                             </FormItem>
