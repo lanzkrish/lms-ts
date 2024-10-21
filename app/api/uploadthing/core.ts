@@ -1,27 +1,30 @@
 import { auth } from "@clerk/nextjs/server";
 import { createUploadthing, type FileRouter } from "uploadthing/next";
-import { UploadThingError } from "uploadthing/server";
 
 const f = createUploadthing();
 
 const handleAuth = () => {
+    console.log("handleAuth");
     const { userId } = auth();
-    if (!userId) throw new Error("Unauthorized"); {
+    if (!userId) throw new Error("Unauthorized");
+    {
         return { userId };
     }
-}
+};
 
 // FileRouter for your app, can contain multiple FileRoutes
 export const ourFileRouter = {
-    courseImage: f({image: {maxFileSize: "2MB", maxFileCount:1 }})
+    courseImage: f({ image: { maxFileSize: "2MB", maxFileCount: 1 } })
         .middleware(() => handleAuth())
-        .onUploadComplete(()=>{}),
+        .onUploadComplete(() => { 
+            console.log("Uploaded course image:");
+        }),
     courseAttachment: f(["text", "image", "video", "audio", "pdf"])
         .middleware(() => handleAuth())
-        .onUploadComplete(()=>{}),
-    chapterVideo: f({video: {maxFileSize: "512GB", maxFileCount:1 }})
+        .onUploadComplete(() => { }),
+    chapterVideo: f({ video: { maxFileSize: "512GB", maxFileCount: 1 } })
         .middleware(() => handleAuth())
-        .onUploadComplete(()=>{}),
+        .onUploadComplete(() => { }),
 } satisfies FileRouter;
 
 export type OurFileRouter = typeof ourFileRouter;
