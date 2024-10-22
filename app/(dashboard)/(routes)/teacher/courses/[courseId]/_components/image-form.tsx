@@ -21,7 +21,7 @@ interface ImageFormProps {
 }
 
 const formSchema = z.object({
-    ImageUrl:z.string().min(1,{
+    imageUrl:z.string().min(1,{
         message: "Image is required"
     }).optional(),
 });
@@ -41,7 +41,7 @@ export const ImageForm = ({
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            ImageUrl: initialData?.imageUrl || "",
+            imageUrl: initialData?.imageUrl || "",
         },
     });
 
@@ -106,7 +106,7 @@ export const ImageForm = ({
                             if(url){
                                 // form.setValue("ImageUrl", url);
                                 onSubmit({
-                                    ImageUrl: url
+                                    imageUrl: url
                                 })
                             }
                         }}
