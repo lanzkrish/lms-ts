@@ -3,7 +3,7 @@ import { db } from "@/lib/db";
 
 
 import { auth } from "@clerk/nextjs/server";
-import { CircleDollarSign, LayoutDashboard, ListChecks } from "lucide-react";
+import { CircleDollarSign, File, LayoutDashboard, ListChecks } from "lucide-react";
 import { redirect } from "next/navigation";
 
 
@@ -12,6 +12,8 @@ import { DescriptionForm } from "./_components/description-form";
 import { ImageForm } from "./_components/image-form";
 import { CategoryForm } from "./_components/category-form";
 import { PriceForm } from "./_components/price-form";
+import { AttachmentForm } from "./_components/attachment-form";
+import { ChaptersForm } from "./_components/chapters-form";
 
 const CourseIdPage = async ({
     params
@@ -30,6 +32,19 @@ const CourseIdPage = async ({
     const course = await db.course.findUnique({
         where: {
             id: params.courseId,
+            userId: userId,
+        },
+        include: {
+            chapters:{
+                orderBy:{
+                    position: "asc",
+                }
+            },
+            attachments: {
+                orderBy: {
+                    createdAt: "desc",
+                }
+            },
         },
     });
 
@@ -52,6 +67,7 @@ const CourseIdPage = async ({
         course.imageUrl,
         course.price,
         course.categoryId,
+        course.chapters.some(chapter => chapter.ispublished),
     ];
 
     const totalFields = requiredFields.length;
@@ -110,9 +126,10 @@ const CourseIdPage = async ({
                                 </h2>
 
                             </div>
-                            <div>
-                                TODO:  chapters
-                            </div>
+                            <ChaptersForm
+                                initialData={course}
+                                courseId={course.id}
+                                />
                         </div>
                         <div>
                             <div className="flex items-center gap-x-2" >
@@ -129,6 +146,19 @@ const CourseIdPage = async ({
                                 />
                             </div>
                         </div>
+                        <div>
+                                <div className="flex items-center gap-x-2" >
+                                    <IconBadge icon={File}  variant="default" />
+                                    <h2 className="text-xl">
+                                        Resources & Attachments
+                                    </h2>
+
+                                </div>
+                                <AttachmentForm
+                                    initialData={course}
+                                    courseId={course.id}
+                                    />
+                            </div>
                 </div>
             </div>
         </div>
