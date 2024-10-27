@@ -88,4 +88,13 @@ body,
     @apply bg-background text-foreground;
   }
 }
+
+.ql-container{
+  font-size: 16px !important;
+}
+.ql-container a {
+  color: blue !important;
+}
+
+
  @import "~@uploadthing/react/styles.css";
