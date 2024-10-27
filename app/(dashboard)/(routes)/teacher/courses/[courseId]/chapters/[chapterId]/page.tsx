@@ -56,6 +56,17 @@ const ChapterIdPage = async ({
                         Back to course Setup
                     </Link>
                     asdsd
+                    <div className="flex items-center justify-between w-full">
+                        <div className="flex flex-col gap-y-2">
+                            <h1 className="text-2xl font-bold">
+                                Chapter Creation loss 
+                                {chapter.title}
+                            </h1>
+                            <p className="text-sm text-gray-500">
+                                {chapter.description}
+                            </p>
+                        </div>
+                    </div>
                 </div>
 
             </div>
