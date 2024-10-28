@@ -116,7 +116,7 @@ export const PriceForm = ({
                                         />
                                     </FormControl>
                                     <FormDescription>
-                                        Add some description to your course so that students will know what this video is about.
+                                        Add a price to your course.
                                     </FormDescription>
                                     <FormMessage />
                             </FormItem>
