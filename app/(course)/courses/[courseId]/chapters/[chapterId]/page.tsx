@@ -1,3 +1,4 @@
+
 import { getChapter } from "@/actions/get-chapter";
 import { Banner } from "@/components/banner";
 
@@ -7,10 +8,8 @@ import { redirect } from "next/navigation";
 import { VideoPlayer } from "./_components/video-player";
 import { CourseEnrollButton } from "./_components/course-enroll-button";
 import { Separator } from "@/components/ui/separator";
-import { Preview } from "@/components/preview";
-import dynamic from "next/dynamic";
+import { PreviewDescription } from "./_components/preview-description";
 
-// const Preview = dynamic(() => import("@/components/preview"), { ssr: false });
 
 const ChapterIdPage = async({
     params,
@@ -91,11 +90,7 @@ const ChapterIdPage = async({
                     </div>
                     <Separator/>
                     <div>
-                        {
-                            <div> Hello
-                                </div>
-                        }
-                        <Preview value={chapter.description!}/>
+                        <PreviewDescription value={chapter.description!}/>
                     </div>
                     {!!attachments.length && (
                         <>
