@@ -10,9 +10,6 @@ import { Loader2, Lock } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useConfettiStore } from "@/hooks/use-confetti-store";
 
-import { Chapter } from "@prisma/client";
-// import { title } from "process";
-
 
 interface VideoPlayerProps {
   playbackId: string;
@@ -52,13 +49,13 @@ export const VideoPlayer = ({
         if (!nextChapterId) {
           confetti.onOpen();
         }
-        toast.success("Capítulo concluído!");
+        toast.success("Progress updated");
         router.refresh();
         if (nextChapterId)
           router.push(`/courses/${courseId}/chapters/${nextChapterId}`);
       }
     } catch (error) {
-      toast.error("Algo deu errado");
+      toast.error("Something went wrong");  
     }
   };
 
@@ -82,7 +79,7 @@ export const VideoPlayer = ({
             !isReady && "hidden"
         )}
         onCanPlay={() => setIsReady(true)}
-        onEnded={() => {}}
+        onEnded={onEnd}
         autoPlay
         playbackId={playbackId}
         />
